@@ -17,15 +17,14 @@ def talk(text):
 
 
 def take_command():
-    cmd = ""
     try:
         with sr.Microphone() as source:
             print('listening...')
             voice = listener.listen(source)
             cmd = listener.recognize_google(voice)
             cmd = cmd.lower()
-            if 'alexa' in cmd:
-                cmd = cmd.replace('alexa', '')
+            if 'bonzibuddy' in cmd:
+                cmd = cmd.replace('bonzibuddy', '')
                 print(cmd)
     except NameError:
         print("An exception occurred")
@@ -51,6 +50,7 @@ def run_alexa():
     elif 'date' in command:
         talk('sorry, I have a headache')
     elif 'are you single' in command:
+        talk("What do u want lol")
         talk('I am in a relationship with wifi')
     elif 'joke' in command:
         talk(pyjokes.get_joke())
