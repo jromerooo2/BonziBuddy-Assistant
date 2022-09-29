@@ -34,7 +34,7 @@ def take_command():
 def run_alexa():
     command = take_command()
     try:
-        if command == "":
+        if command == "bonzibuddy":
             talk("Sorry, I didn't get that")
         if 'play' in command:
             song = command.replace('play', '')
@@ -43,6 +43,9 @@ def run_alexa():
         elif 'time' in command:
             time = datetime.datetime.now().strftime('%I:%M %p')
             talk('Current time is ' + time)
+        elif 'loco' in command:
+            talk('Fuck you too')
+        #TODO: Check what is happening here...
         # elif 'who the heck is' in command:
         #     person = command.replace('who the heck is', '')
         #     info = wikipedia.summary(person, 1)
