@@ -16,6 +16,17 @@ def talk(text):
     engine.runAndWait()
 
 
+def get_feedback(joke):
+    try:
+        with sr.Microphone() as source:
+            print("Listening to your feedback")
+            voice  = listener.listen(source)
+            feed = listener.recognize_google(voice)
+            feed =  feed.lower()
+            talk("I really appreciate your feedback")
+            talk(joke)
+    except:
+
 def take_command():
     try:
         with sr.Microphone() as source:
@@ -56,7 +67,10 @@ def run_alexa():
             talk("What do u want lol")
             talk('I am in a relationship with wifi')
         elif 'joke' in command:
-            talk(pyjokes.get_joke())
+            joke = pyjokes.get_joke()
+            talk(joke)
+            talk("Did you enjoy the joke?")
+            get_feedback(joke)
     except NameError:
         talk("Can you repeat that please?")
 
