@@ -26,7 +26,8 @@ def get_feedback(joke):
             talk("I really appreciate your feedback")
             talk(joke)
     except:
-
+        except NameError:
+        print("An exception occurred")
 def take_command():
     try:
         with sr.Microphone() as source:
