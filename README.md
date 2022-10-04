@@ -10,3 +10,8 @@ pip install pipreqs
 ``
 pipreqs /home/project/location
 ``
+
+If you're want to use this project run the following:
+``
+pip install -r requirements.txt
+``
