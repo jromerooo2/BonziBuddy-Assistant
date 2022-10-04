@@ -25,8 +25,7 @@ def get_feedback(joke):
             feed =  feed.lower()
             talk("I really appreciate your feedback")
             talk(joke)
-    except:
-        except NameError:
+    except NameError:
         print("An exception occurred")
 def take_command():
     try:
