@@ -34,8 +34,8 @@ def write_paper(prompt):
     )
     number = random.randrange(1, 100)
     file_name = "paper" + str(number)
-    file_path = "./Papers/" + file_name + ".txt"
-    f = open("./Papers/" + file_name + ".txt", "w+")
+    file_path = "./Assistant Files/" + file_name + ".txt"
+    f = open("./Assistant Files/" + file_name + ".txt", "w+")
     f.write(chatResponse['choices'][0]['text'])
     f.close()
     osCommandString = "notepad.exe " + file_path + ""
@@ -46,6 +46,19 @@ def summarize(prompt):
     chatResponse = openai.Completion.create(
         model="text-davinci-003",
         prompt="Summarize this text:\n\n " + prompt,
+        temperature=0.5,
+        max_tokens=64,
+        top_p=1,
+        frequency_penalty=0.0,
+        presence_penalty=0.6,
+    )
+    return chatResponse['choices'][0]['text']
+
+
+def getJoke(prompt):
+    chatResponse = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=prompt,
         temperature=0.5,
         max_tokens=64,
         top_p=1,

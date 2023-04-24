@@ -3,12 +3,10 @@ import json
 import webbrowser
 from time import sleep
 import pyautogui
-import pyjokes
 import pyttsx3
 import pywhatkit
 import speech_recognition as sr
-import chatGPT
-from Apps import codeCompletion
+from Plugins import chatGPT
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
@@ -64,12 +62,6 @@ def run_alexa():
             talk('playing ' + song)
             pywhatkit.playonyt(song)
 
-        elif 'code' in command:
-            talk("What type of code is it?")
-            extension = get_response()
-            talk("What would you like programmed?")
-            prompt = get_response()
-            codeCompletion.new_file(extension, prompt)
         # Will ask ChatGPT for information on thing
         elif 'what is' in command:
             talk(chatGPT.new_chat(command))
@@ -83,7 +75,7 @@ def run_alexa():
         elif 'message' in command:
             cmd = command.replace('message', '')
             cmd = cmd.strip()
-            with open('contact.json') as f:
+            with open('Data/contact.json') as f:
                 data = json.load(f)
             try:
                 webbrowser.open(data['Contacts'][cmd]['link'])
@@ -99,15 +91,12 @@ def run_alexa():
             except sr.UnknownValueError:
                 talk("An error occurred. ")
                 return
-
             sleep(1)
             pyautogui.press('enter')
 
         # Will tell a joke
         elif 'joke' in command:
-            joke = pyjokes.get_joke()
-            talk(joke)
-            talk("Did you enjoy the joke?")
+            chatGPT.getJoke(command)
 
         # Will write a paper based on your parameters and store/open the file when done
         elif 'write a paper' in command:
