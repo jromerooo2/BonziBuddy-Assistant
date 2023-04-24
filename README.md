@@ -1,4 +1,4 @@
-# BonziBuddy-Assistant
+# Auto-Assistant
 
 Alexa made with python,
 
