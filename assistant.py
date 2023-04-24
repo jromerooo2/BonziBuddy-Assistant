@@ -8,6 +8,7 @@ import pyttsx3
 import pywhatkit
 import speech_recognition as sr
 import chatGPT
+from Apps import codeCompletion
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
@@ -27,6 +28,7 @@ def get_response():
         with sr.Microphone() as source:
             print("Listening to your Response")
             voice = listener.listen(source)
+
             feed = listener.recognize_google(voice)
             feed = feed.lower()
     except NameError:
@@ -41,7 +43,7 @@ def take_command():
             voice = listener.listen(source)
             cmd = listener.recognize_google(voice)
             cmd = cmd.lower()
-            if wake_word in cmd:
+            if "test" in cmd:
                 cmd = cmd.replace(wake_word, '')
                 print(cmd)
     except NameError:
@@ -62,6 +64,12 @@ def run_alexa():
             talk('playing ' + song)
             pywhatkit.playonyt(song)
 
+        elif 'code' in command:
+            talk("What type of code is it?")
+            extension = get_response()
+            talk("What would you like programmed?")
+            prompt = get_response()
+            codeCompletion.new_file(extension, prompt)
         # Will ask ChatGPT for information on thing
         elif 'what is' in command:
             talk(chatGPT.new_chat(command))

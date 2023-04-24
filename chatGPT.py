@@ -4,7 +4,7 @@ import os
 
 # OpenAI Initialization
 openai.organization = "org-vxtFFnnBThf1eKODPmnmi6R3"
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 def new_chat(prompt):
