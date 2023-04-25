@@ -1,6 +1,8 @@
 import datetime
 import json
 from time import sleep
+
+import speech_recognition.exceptions
 import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -8,10 +10,10 @@ import pyautogui
 import pyttsx3
 import pywhatkit
 import speech_recognition as sr
+
 from Plugins import chatGPT
 
 options = webdriver.ChromeOptions()
-# options.add_argument('proxy-server=23.252.178.95:3128')
 options.add_argument("--user-data-dir=C:\\Users\\jonet\\AppData\\Local\\Google\\Chrome\\User Data\\Default")
 listener = sr.Recognizer()
 engine = pyttsx3.init()
@@ -53,6 +55,7 @@ def take_command():
 
 
 def run_alexa():
+    global message
     command = take_command()
     try:
         # Said Only Wake word
@@ -98,7 +101,7 @@ def run_alexa():
                 else:
                     talk("An Error Occurred.")
 
-            except NameError:
+            except KeyError:
                 talk("An Error Occurred.")
                 return
         # Will tell a joke
@@ -113,7 +116,7 @@ def run_alexa():
         else:
             talk("Sorry I did not understand that.")
             return
-    except NameError:
+    except speech_recognition.UnknownValueError:
         talk("Can you repeat that please?")
 
 
