@@ -1,19 +1,22 @@
 import datetime
 import json
-import webbrowser
 from time import sleep
+import undetected_chromedriver as uc
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 import pyautogui
 import pyttsx3
 import pywhatkit
 import speech_recognition as sr
 from Plugins import chatGPT
 
+options = webdriver.ChromeOptions()
+# options.add_argument('proxy-server=23.252.178.95:3128')
+options.add_argument("--user-data-dir=C:\\Users\\jonet\\AppData\\Local\\Google\\Chrome\\User Data\\Default")
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
-
-wake_word = "test"
 
 
 def talk(text):
@@ -26,9 +29,9 @@ def get_response():
         with sr.Microphone() as source:
             print("Listening to your Response")
             voice = listener.listen(source)
-
             feed = listener.recognize_google(voice)
             feed = feed.lower()
+            print(feed)
     except NameError:
         print("An exception occurred")
     return feed
@@ -42,7 +45,7 @@ def take_command():
             cmd = listener.recognize_google(voice)
             cmd = cmd.lower()
             if "test" in cmd:
-                cmd = cmd.replace(wake_word, '')
+                cmd = cmd.replace("test", '')
                 print(cmd)
     except NameError:
         print("An exception occurred")
@@ -53,11 +56,11 @@ def run_alexa():
     command = take_command()
     try:
         # Said Only Wake word
-        if command == wake_word:
+        if command == "test":
             talk("Sorry, I didn't get that")
 
         # Will open YouTube with a random video from the channel
-        if 'play' in command:
+        elif 'play' in command:
             song = command.replace('play', '')
             talk('playing ' + song)
             pywhatkit.playonyt(song)
@@ -75,25 +78,29 @@ def run_alexa():
         elif 'message' in command:
             cmd = command.replace('message', '')
             cmd = cmd.strip()
-            with open('Data/contact.json') as f:
+            talk("Messaging " + cmd)
+            with open('contact.json') as f:
                 data = json.load(f)
             try:
-                webbrowser.open(data['Contacts'][cmd]['link'])
+                link = data['Contacts'][cmd]['link']
+                sleep(2)
+                if link:
+                    driver = uc.Chrome(options=options)
+                    driver.get(link)
+                    pyautogui.press('enter')
+                    sleep(5)
+                    driver.find_element(By.XPATH, data["inputXPath"]).click()
+                    talk("What would you like to say?")
+                    message = get_response()
+                    talk("You would like me to send " + message)
+                    pyautogui.write(message)
+                    pyautogui.press('enter')
+                else:
+                    talk("An Error Occurred.")
+
             except NameError:
                 talk("An Error Occurred.")
                 return
-            sleep(4)
-            pyautogui.click(590, 1000)
-            talk("What would you like to say?")
-            try:
-                response = get_response()
-                pyautogui.write(response)
-            except sr.UnknownValueError:
-                talk("An error occurred. ")
-                return
-            sleep(1)
-            pyautogui.press('enter')
-
         # Will tell a joke
         elif 'joke' in command:
             chatGPT.getJoke(command)
